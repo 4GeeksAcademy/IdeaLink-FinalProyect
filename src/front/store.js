@@ -1,61 +1,52 @@
-export const initialStore = () => {
-  return {
-    message: null,
-    user: null,
-    projects: [],  
-    todos: [
-      {
-        id: 1,
-        title: "Make the bed",
-        background: null,
-      },
-      {
-        id: 2,
-        title: "Do my homework",
-        background: null,
-      }
-    ]
-  };
-};
+// store.js
+// ───────────────────────────────────────────────────────────
+// Estado y reducer global + helpers de API
+// ───────────────────────────────────────────────────────────
+
+export const initialStore = () => ({
+  message: null,
+  user: null,
+  projects: [],
+  todos: [
+    { id: 1, title: "Make the bed", background: null },
+    { id: 2, title: "Do my homework", background: null }
+  ]
+});
 
 export default function storeReducer(store, action = {}) {
   switch (action.type) {
-    case 'set_hello':
-      return {
-        ...store,
-        message: action.payload
-      };
+    case "set_hello":
+      return { ...store, message: action.payload };
 
-    case 'add_task':
+    case "add_task": {
       const { id, color } = action.payload;
       return {
         ...store,
-        todos: store.todos.map((todo) =>
-          todo.id === id ? { ...todo, background: color } : todo
+        todos: store.todos.map(t =>
+          t.id === id ? { ...t, background: color } : t
         )
       };
+    }
 
-    case 'set_user':
-      return {
-        ...store,
-        user: action.payload
-      };
+    case "set_user":
+      return { ...store, user: action.payload };
 
-    case 'add_project': 
-      return {
-        ...store,
-        projects: [...store.projects, action.payload]
-      };
-    case 'set_projects':
-      return {
-        ...store,
-        projects: action.payload
-      };
+    case "add_project":
+      return { ...store, projects: [...store.projects, action.payload] };
+
+    case "set_projects":
+      return { ...store, projects: action.payload };
+
     default:
-      throw Error('Unknown action.');
+      throw Error("Unknown action.");
   }
 }
 
+/*───────────────────────────────────────────────────────────
+  Helpers de API
+───────────────────────────────────────────────────────────*/
+
+// Registro de usuario
 export const register = async (email, password, username) => {
   const res = await fetch("http://127.0.0.1:5000/api/register", {
     method: "POST",
@@ -64,17 +55,17 @@ export const register = async (email, password, username) => {
   });
   const data = await res.json();
   if (res.ok) {
-    alert('Usuario registrado correctamente');
+    alert("Usuario registrado correctamente");
   } else {
-    alert(data.msg || 'Error al registrar usuario');
+    alert(data.msg || "Error al registrar usuario");
   }
 };
 
+// Login con email+password → devuelve objeto usuario COMPLETO con token
 export const login = async (email, password) => {
-  const res = await fetch("http://localhost:5000/api/token", {
+  const res = await fetch("http://127.0.0.1:5000/api/token", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    credentials: "include",
     body: JSON.stringify({ email, password })
   });
 
@@ -84,38 +75,35 @@ export const login = async (email, password) => {
   }
 
   const data = await res.json();
-  console.log("✅ LOGIN DATA:", data);
   localStorage.setItem("jwt-token", data.token);
   return data;
 };
 
-
+// Devuelve perfil (requiere token en localStorage)
 export const getProfile = async () => {
-  const token = localStorage.getItem('jwt-token');
-
+  const token = localStorage.getItem("jwt-token");
   const res = await fetch("http://127.0.0.1:5000/api/profile", {
-    method: 'GET',
+    method: "GET",
     headers: {
-      'Authorization': `Bearer ${token}`,
-      'Content-Type': 'application/json'
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json"
     }
   });
 
   if (!res.ok) {
     const errorText = await res.text();
     console.error("❌ PROFILE ERROR TEXT:", errorText);
-    throw new Error('Acceso denegado');
+    throw new Error("Acceso denegado");
   }
 
   const data = await res.json();
-  console.log("✅ PROFILE DATA:", data);
   return data;
 };
 
-
+// Crear proyecto nuevo
 export const createProject = async (formData, user) => {
- const token = localStorage.getItem('jwt-token');
-console.log("🔑 TOKEN:", token); 
+  const token = localStorage.getItem("jwt-token");
+  console.log("🔑 TOKEN:", token);
 
   const payload = {
     ...formData,
@@ -127,7 +115,7 @@ console.log("🔑 TOKEN:", token);
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      "Authorization": `Bearer ${token}`  
+      Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify(payload),
   });
@@ -140,6 +128,5 @@ console.log("🔑 TOKEN:", token);
   const data = await res.json();
   return data;
 };
-
 
 

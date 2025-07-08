@@ -17,64 +17,48 @@ export default function ChatApp({ currentUser, friend }) {
     const [ready, setReady] = useState(false);
     const [channel, setChannel] = useState(null);
 
-    /* Conectamos al usuario actual solo una vez */
+    /* 1. Conectar usuario actual --------------------------------- */
     useEffect(() => {
         let cancelled = false;
 
-        const connect = async () => {
-            if (!client.userID) {
-                await client.connectUser(
-                    {
-                        id: currentUser.id,
-                        name: currentUser.name,
-                        image: `https://getstream.io/random_png/?id=${currentUser.id}`,
-                    },
-                    client.devToken(currentUser.id)
-                );
-            }
-            if (!cancelled) setReady(true);
-        };
+        async function connectUser() {
+            try {
+                if (client.userID) return; // ya conectado
 
-        connect();
-        return () => {
-            cancelled = true; // NO hacemos disconnectUser → seguimos conectados
-        };
-    }, [currentUser]);
+                if (!currentUser?.token) {
+                    console.error("No token en currentUser");
+                    return;
+                }
 
-    /* Cada vez que cambie el amigo creamos o recuperamos el canal DM */
-    useEffect(() => {
-        let cancelled = false;
+                const token = await getStreamToken(currentUser, friend); // ← enviamos friend
 
-        const connect = async () => {
-            if (!client.userID) {
                 await client.connectUser(
                     {
                         id: String(currentUser.id),
-                        name: currentUser.name,
+                        name: currentUser.name || currentUser.email,
                         image: `https://getstream.io/random_png/?id=${currentUser.id}`,
                     },
-                    client.devToken(String(currentUser.id))
+                    token
                 );
-            }
-            if (!cancelled) setReady(true);
-        };
 
-        connect();
+                if (!cancelled) setReady(true);
+            } catch (err) {
+                console.error("Error al conectar usuario a Stream:", err);
+            }
+        }
+
+        connectUser();
         return () => {
             cancelled = true;
+            client.disconnectUser();
         };
-    }, [currentUser]);
+    }, [currentUser, friend]);
 
+    /* 2. Crear / abrir canal DM ---------------------------------- */
     useEffect(() => {
         if (!ready || !friend) return;
 
-        const initChannel = async () => {
-            await client.upsertUser({
-                id: String(friend.id),
-                name: friend.name,
-                image: `https://getstream.io/random_png/?id=${friend.id}`,
-            });
-
+        const createOrOpenChannel = async () => {
             const members = [String(currentUser.id), String(friend.id)].sort();
             const channelId = members.join("--");
 
@@ -82,17 +66,17 @@ export default function ChatApp({ currentUser, friend }) {
                 name: friend.name,
                 members,
             });
+
             await ch.watch();
             setChannel(ch);
         };
 
-        initChannel();
+        createOrOpenChannel();
     }, [ready, friend, currentUser]);
 
+    if (!ready || !channel) return <p className="text-center text-white p-4">Cargando chat…</p>;
 
-    if (!ready || !channel)
-        return <p className="text-center text-white p-4">Cargando chat…</p>;
-
+    /* 3. UI ------------------------------------------------------ */
     return (
         <div className="rounded-2xl overflow-hidden border border-gray-700 h-[460px]">
             <Chat client={client} theme="str-chat__theme-dark">
@@ -108,4 +92,31 @@ export default function ChatApp({ currentUser, friend }) {
     );
 }
 
+/* Petición al backend para token + alta de usuarios ------------- */
+async function getStreamToken(user, friend) {
+    const res = await fetch("http://127.0.0.1:5000/api/stream-token", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${user.token}`,
+        },
+        body: JSON.stringify({
+            me: {
+                name: user.name || user.email,
+                image: `https://getstream.io/random_png/?id=${user.id}`,
+            },
+            friends: [
+                {
+                    id: friend.id,
+                    name: friend.name || friend.email,
+                    image: `https://getstream.io/random_png/?id=${friend.id}`,
+                }
+            ]
+        }),
+    });
+
+    if (!res.ok) throw new Error("Backend devolvió " + res.status);
+    const { token } = await res.json();
+    return token;
+}
 

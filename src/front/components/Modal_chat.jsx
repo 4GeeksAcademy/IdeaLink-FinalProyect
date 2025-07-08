@@ -9,7 +9,6 @@ export default function ModalChat({ open, onClose, currentUser, friend }) {
             size="xl"
             className="fixed bottom-6 right-4 w-full max-w-[450px] bg-[#1e293b] rounded-2xl p-4"
         >
-            {/* Botón de cerrar */}
             <IconButton
                 size="sm"
                 color="blue-gray"

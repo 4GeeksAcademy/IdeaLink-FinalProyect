@@ -5,9 +5,10 @@ import ModalChat from "../Modal_chat";
 import { getFriends } from "../../../api/routes/friendService";
 import FriendRequests from "../FriendRequests";
 import SendFriendRequestTest from "../SendFriendRequestTest";
+import useGlobalReducer from "../../hooks/useGlobalReducer";
 
 export default function SidebarRight() {
-  const currentUser = { id: "usuario1", name: "Francisco" };
+  const { store } = useGlobalReducer();
 
   const [friend, setFriend] = useState(null);
   const [open, setOpen] = useState(false);
@@ -34,12 +35,14 @@ export default function SidebarRight() {
     }
   }, [token]);
 
+  const currentUser = store.user;
+  console.log("SidebarRight - currentUser:", currentUser);
 
   return (
     <>
       <aside className="chat_sidebar w-[300px] bg-[#1e293b] p-2 text-white border border-gray-500 max-h-[360px] overflow-y-auto rounded-md">
 
-        <FriendRequests />  {/* Aquí mostramos las solicitudes pendientes */}
+        <FriendRequests />
 
         <div className="space-y-4 text-sm mt-4">
           {friends.length === 0 && <p>No tienes amigos aún</p>}
@@ -49,6 +52,10 @@ export default function SidebarRight() {
               <div
                 className="flex items-center justify-between cursor-pointer hover:bg-blue-500/10 px-2 py-1.5 rounded-md"
                 onClick={() => {
+                  if (!currentUser?.token) {
+                    alert("Debes iniciar sesión para chatear");
+                    return;
+                  }
                   setFriend(u);
                   setOpen(true);
                 }}

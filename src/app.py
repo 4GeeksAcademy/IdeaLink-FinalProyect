@@ -2,6 +2,10 @@
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
 import os
+from dotenv import load_dotenv          # ➊  Añade esto
+
+load_dotenv(dotenv_path=".env.example")                           # ➋  Carga variables .env **antes de todo**
+
 from flask import Flask, request, jsonify, url_for, send_from_directory
 from flask_migrate import Migrate
 from flask_swagger import swagger
@@ -13,7 +17,8 @@ from api.commands import setup_commands
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager
 from stream_chat import StreamChat
-from api.routes.friend_routes import friend_bp 
+from api.routes.friend_routes import friend_bp   # ← ahora ya es seguro importarlo
+
 
 STREAM_API_KEY = os.getenv("STREAM_API_KEY", "2pks7t76xeqd")
 STREAM_API_SECRET = os.getenv("STREAM_API_SECRET", "egfuhcyva6qbngb29zun8ru46v5ruaq7xy2kbfqse885vbfsrs7chgk42pnse5y5")  
