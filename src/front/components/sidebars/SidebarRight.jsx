@@ -35,8 +35,10 @@ export default function SidebarRight() {
     }
   }, [token]);
 
+
   const currentUser = store.user;
   console.log("SidebarRight - currentUser:", currentUser);
+
 
   return (
     <>
