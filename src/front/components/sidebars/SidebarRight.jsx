@@ -13,13 +13,27 @@ export default function SidebarRight() {
   const [open, setOpen] = useState(false);
   const [friends, setFriends] = useState([]);
 
-  const token = localStorage.getItem("jwt-token");  // Asegúrate de usar el mismo key para el token
+  const token = localStorage.getItem("jwt-token");
 
   useEffect(() => {
     if (token) {
-      getFriends(token).then(setFriends);
+      getFriends(token)
+        .then((res) => {
+          console.log("getFriends response:", res);
+          if (Array.isArray(res)) {
+            setFriends(res);
+          } else {
+            console.error("Expected an array but got:", res);
+            setFriends([]);
+          }
+        })
+        .catch((err) => {
+          console.error("Error fetching friends:", err);
+          setFriends([]);
+        });
     }
   }, [token]);
+
 
   return (
     <>
