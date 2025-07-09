@@ -17,10 +17,11 @@ export const Layout = () => {
             if (token) {
                 try {
                     const user = await getProfile();
-                    dispatch({ type: "set_user", payload: user });
+                    dispatch({ type: "set_user", payload: { ...user, token } });
                 } catch (error) {
                     console.warn("⚠️ Token inválido o expirado");
                     localStorage.removeItem("jwt-token");
+                    localStorage.removeItem("user-profile");
                     dispatch({ type: "set_user", payload: null });
                 }
             } else {

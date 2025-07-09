@@ -25,6 +25,7 @@ export default function Login() {
       });
 
       localStorage.setItem("user-profile", JSON.stringify(userComplete));
+      localStorage.setItem("jwt-token", userAuth.token);
 
       navigate("/feed");
     } catch (err) {
