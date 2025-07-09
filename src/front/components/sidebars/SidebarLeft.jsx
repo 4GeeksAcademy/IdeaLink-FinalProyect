@@ -4,13 +4,43 @@ import Separator from "./Separator";
 import { Link, useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import LogoBombilla from "../LogoBombilla";
+
 import { MessageCircle } from "lucide-react";
+
 import AIChatSidebar from "./AIChatSidebar";
 
 export default function SidebarLeft() {
   const location = useLocation();
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
+
+  const [chatHeight, setChatHeight] = useState(300);
+  const isResizing = useRef(false);
+
+  const startResizing = () => {
+    isResizing.current = true;
+  };
+
+  const stopResizing = () => {
+    isResizing.current = false;
+  };
+
+  const resize = (e) => {
+    if (!isResizing.current) return;
+    const newHeight = window.innerHeight - e.clientY - 60;
+    if (newHeight >= 200 && newHeight <= 600) {
+      setChatHeight(newHeight);
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("mousemove", resize);
+    window.addEventListener("mouseup", stopResizing);
+    return () => {
+      window.removeEventListener("mousemove", resize);
+      window.removeEventListener("mouseup", stopResizing);
+    };
+  }, []);
 
   const navItems = [
     { label: "Dashboard", icon: Home, to: "/feed" },
@@ -44,6 +74,7 @@ export default function SidebarLeft() {
         <div className="pt-6">
           <Separator />
         </div>
+
         <button
           onClick={() => setOpen(true)}
           className="mt-4 w-full flex items-center justify-center gap-2 bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-md text-sm"
@@ -52,6 +83,7 @@ export default function SidebarLeft() {
           Chat IA
         </button>
         <button
+
           onClick={() => navigate("/")}
           className="absolute bottom-4 left-4 bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-md text-sm cursor-pointer"
         >
