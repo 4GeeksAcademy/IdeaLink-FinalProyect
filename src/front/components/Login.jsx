@@ -25,6 +25,7 @@ export default function Login() {
       });
 
       localStorage.setItem("user-profile", JSON.stringify(userComplete));
+      localStorage.setItem("jwt-token", userAuth.token);
 
       navigate("/feed");
     } catch (err) {
@@ -35,7 +36,7 @@ export default function Login() {
 
 
   return (
-    <div className="Login w-full flex justify-center bg-gray-900 text-white">
+    <div className="Login w-full flex justify-center bg-gray-900 text-white pe-5">
       <div className="flex flex-col justify-center px-6 py-12 lg:px-8
                       h-auto lg:h-[800px] w-full max-w-[600px]
                       shadow-2xl shadow-purple-500/60 bg-gray-800 rounded-lg">
@@ -71,7 +72,7 @@ export default function Login() {
           </button>
         </form>
 
-        <p className="mt-10 text-center text-sm text-gray-400">
+        <p className="mt-10 text-center text-sm text-gray-400 mb-20">
           ¿Aún no eres miembro?{" "}
           <Link to="/register" className="font-semibold text-purple-400 hover:text-purple-300">
             Regístrate aquí

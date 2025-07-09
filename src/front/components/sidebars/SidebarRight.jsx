@@ -18,12 +18,27 @@ export default function SidebarRight() {
 
   useEffect(() => {
     if (token) {
-      getFriends(token).then(setFriends);
+      getFriends(token)
+        .then((res) => {
+          console.log("getFriends response:", res);
+          if (Array.isArray(res)) {
+            setFriends(res);
+          } else {
+            console.error("Expected an array but got:", res);
+            setFriends([]);
+          }
+        })
+        .catch((err) => {
+          console.error("Error fetching friends:", err);
+          setFriends([]);
+        });
     }
   }, [token]);
 
+
   const currentUser = store.user;
   console.log("SidebarRight - currentUser:", currentUser);
+
 
   return (
     <>
