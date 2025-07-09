@@ -54,11 +54,10 @@ const AIChatSidebar = () => {
         {messages.map((msg, i) => (
           <div
             key={i}
-            className={`max-w-[75%] px-3 py-2 rounded-xl text-sm ${
-              msg.sender === "user"
-                ? "bg-blue-600 self-end text-white"
-                : "bg-gray-700 self-start text-gray-100"
-            }`}
+            className={`max-w-[] px-3 py-2 rounded-xl text-sm ${msg.sender === "user"
+              ? "bg-blue-600 self-end text-white"
+              : "bg-gray-700 self-start text-gray-100"
+              }`}
           >
             {msg.text}
           </div>

@@ -52,15 +52,14 @@ export default function SidebarLeft() {
         <LogoBombilla />
       </div>
 
-      <aside className="w-64 bg-[#1e293b] p-5 pt-0 space-y-6 text-white mt-0 flex flex-col justify-between relative h-screen">
+      <aside className="w-64 bg-[#1e293b] p-5 pt-0 space-y-6 text-white mt-0">
         <nav className="space-y-3">
           {navItems.map(({ label, icon: Icon, to }) => (
             <Link
               to={to}
               key={label}
-              className={`w-full flex items-center space-x-3 text-left p-2 rounded-md transition-colors duration-200 cursor-pointer ${
-                location.pathname === to ? "bg-purple-700" : "hover:bg-purple-500/20"
-              }`}
+              className={`w-full flex items-center space-x-3 text-left p-2 rounded-md transition-colors duration-200 cursor-pointer ${location.pathname === to ? "bg-purple-700" : "hover:bg-purple-500/20"
+                }`}
             >
               <Icon className="w-4 h-4" />
               <span>{label}</span>
