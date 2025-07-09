@@ -29,7 +29,7 @@ export default function LogoBombilla() {
 
     return (
         <div
-            className="   cursor-pointer object-cover "
+            className="relative h-[140px] w-[220px] cursor-pointer overflow-hidden"
             onMouseEnter={handleHover}
         >
             <AnimatePresence>
@@ -38,7 +38,7 @@ export default function LogoBombilla() {
                         key="bombilla"
                         src={Bombilla}
                         alt="Logo"
-                        className=" w-[200px] h-[150px] object-cover pb-20"
+                        className="w-full h-full object-contain"
                         initial={{ scale: 1 }}
                         animate={{ scale: 1 }}
                         exit={{ scale: 0, opacity: 0, rotate: 90 }}
