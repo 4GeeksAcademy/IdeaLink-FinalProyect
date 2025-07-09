@@ -1,0 +1,44 @@
+.ai-chat-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  pointer-events: auto;
+}
+
+.ai-chat-modal__overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
+  z-index: 1;
+}
+
+.ai-chat-modal__content {
+  position: relative;
+  z-index: 2;
+  background-color: #1e1e2f;
+  border: 1px solid #7e22ce;
+  border-radius: 1rem;
+  width: 100%;
+  max-width: 420px;
+  max-height: 90vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.6);
+}
+
+.ai-chat-modal__close {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  background: #334155;
+  color: white;
+  border-radius: 9999px;
+  padding: 0.25rem;
+  cursor: pointer;
+  z-index: 3;
+}
