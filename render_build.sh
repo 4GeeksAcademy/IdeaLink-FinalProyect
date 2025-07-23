@@ -2,9 +2,12 @@
 # exit on error
 set -o errexit
 
+# Frontend
 npm install
 npm run build
 
+# Backend
 pipenv install
 
-pipenv run upgrade
+PYTHONPATH=$PYTHONPATH:$(pwd)/src pipenv run alembic -c migrations/alembic.ini stamp head
+

@@ -3,6 +3,8 @@ import useGlobalReducer from "../hooks/useGlobalReducer";
 import Tarjeta from "./feed_central/Tarjeta_feed";
 import AddFriendButton from "./AddFriendButton";
 
+const API_BASE = import.meta.env.VITE_API_URL;
+
 const User_perfil = () => {
     const { store, dispatch } = useGlobalReducer();
     const user = store.user;
@@ -30,7 +32,7 @@ const User_perfil = () => {
         setError(null);
 
         try {
-            const res = await fetch("http://127.0.0.1:5000/api/my-projects", {
+            const res = await fetch(`${API_BASE}/my-projects`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
@@ -51,7 +53,7 @@ const User_perfil = () => {
     const fetchFavorites = useCallback(async () => {
         const token = localStorage.getItem("jwt-token");
         try {
-            const res = await fetch("http://127.0.0.1:5000/api/my-favorites", {
+            const res = await fetch(`${API_BASE}/my-favorites`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
 
@@ -99,7 +101,7 @@ const User_perfil = () => {
         setError(null);
 
         try {
-            const res = await fetch("http://127.0.0.1:5000/api/profile", {
+            const res = await fetch(`${API_BASE}/profile`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",

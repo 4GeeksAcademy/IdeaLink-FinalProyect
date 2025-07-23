@@ -5,6 +5,7 @@ import Logo_dark from '../assets/img/Logo_dark.png';
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
+const API_BASE = import.meta.env.VITE_API_URL;
 
 const Register = () => {
   const [email, setEmail] = useState('');
@@ -16,7 +17,7 @@ const Register = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch("http://127.0.0.1:5000/api/register", {
+      const response = await fetch(`${API_BASE}/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password, username })

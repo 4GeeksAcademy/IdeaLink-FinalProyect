@@ -6,6 +6,8 @@ import LogoBombilla from "../LogoBombilla";
 import AIChatModal from "./AIChatModal";
 import useGlobalReducer from "../../hooks/useGlobalReducer";
 
+const API_BASE = import.meta.env.VITE_API_URL;
+
 export default function SidebarLeft() {
   const location = useLocation();
   const navigate = useNavigate();
@@ -25,7 +27,7 @@ export default function SidebarLeft() {
     const fetchApplicationsCount = async () => {
       try {
         const token = localStorage.getItem("jwt-token");
-        const res = await fetch("http://127.0.0.1:5000/api/my-project-applications", {
+        const res = await fetch(`${API_BASE}/my-project-applications`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         if (!res.ok) throw new Error("Error al obtener postulaciones");

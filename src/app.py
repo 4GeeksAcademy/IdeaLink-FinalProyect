@@ -36,7 +36,7 @@ CORS(app, supports_credentials=True, expose_headers=["Authorization"], allow_hea
 CORS(app, origins=[
     "https://potential-chainsaw-97j7q96jxvv4cxx6v-3000.app.github.dev",
     "https://supreme-telegram-7vpvr97px66vhpr55-3000.app.github.dev",
-    "https://cautious-halibut-4jwjg7qwr9qphqw5q-3000.app.github.dev",
+    "https://sample-service-name-alvt.onrender.com",
     "http://localhost:3000"
 ], supports_credentials=True)
 

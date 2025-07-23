@@ -12,6 +12,8 @@ import { UserCircle } from "lucide-react";
 import { toast } from "react-toastify";
 import "./Modal_postularse.css";
 
+const API_BASE = import.meta.env.VITE_API_URL;
+
 export default function Modal_postularse({ projectId }) {
     const [open, setOpen] = useState(false);
     const [message, setMessage] = useState("");
@@ -22,7 +24,7 @@ export default function Modal_postularse({ projectId }) {
         const token = localStorage.getItem("jwt-token");
 
         try {
-            const res = await fetch("http://127.0.0.1:5000/api/applications", {
+            const res = await fetch(`${API_BASE}/applications`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

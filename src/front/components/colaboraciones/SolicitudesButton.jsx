@@ -3,6 +3,8 @@ import { createPortal } from "react-dom";
 import { Users } from "lucide-react";
 import useGlobalReducer from "../../hooks/useGlobalReducer"; // 👈 IMPORTANTE
 
+const API_BASE = import.meta.env.VITE_API_URL;
+
 export default function SolicitudesButton() {
     const [applications, setApplications] = useState([]);
     const [showRequests, setShowRequests] = useState(false);
@@ -15,7 +17,7 @@ export default function SolicitudesButton() {
     const fetchApplications = async () => {
         try {
             const token = localStorage.getItem("jwt-token");
-            const res = await fetch("http://127.0.0.1:5000/api/my-project-applications", {
+            const res = await fetch(`${API_BASE}/my-project-applications`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
             if (!res.ok) throw new Error("Error al obtener postulaciones");
@@ -45,7 +47,7 @@ export default function SolicitudesButton() {
     const handleAccept = async (appId) => {
         try {
             const token = localStorage.getItem("jwt-token");
-            const res = await fetch(`http://127.0.0.1:5000/api/applications/${appId}/accept`, {
+            const res = await fetch(`${API_BASE}/applications/${appId}/accept`, {
                 method: "POST",
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -68,7 +70,7 @@ export default function SolicitudesButton() {
     const handleReject = async (appId) => {
         try {
             const token = localStorage.getItem("jwt-token");
-            const res = await fetch(`http://127.0.0.1:5000/api/applications/${appId}/reject`, {
+            const res = await fetch(`${API_BASE}/applications/${appId}/reject`, {
                 method: "POST",
                 headers: {
                     Authorization: `Bearer ${token}`,

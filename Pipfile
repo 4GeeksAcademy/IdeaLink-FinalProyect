@@ -22,6 +22,8 @@ stream-chat = "*"
 flask-migrate = "*"
 python-dotenv = "*"
 flask = "*"
+tomli = "*"
+async-timeout = "*"
 
 [requires]
 python_version = "3.13"

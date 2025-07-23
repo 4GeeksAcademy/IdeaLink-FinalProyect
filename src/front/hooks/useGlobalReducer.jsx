@@ -1,7 +1,7 @@
 import { useContext, useReducer, createContext, useEffect, useState, useRef } from "react";
 import storeReducer, { initialStore } from "../store";
 import { StreamChat } from "stream-chat";
-
+const API_BASE = import.meta.env.VITE_API_URL;
 const StoreContext = createContext();
 const apiKey = "2pks7t76xeqd";
 const client = StreamChat.getInstance(apiKey);
@@ -99,7 +99,7 @@ export default function useGlobalReducer() {
 }
 
 async function getStreamToken(user) {
-    const res = await fetch("http://127.0.0.1:5000/api/stream-token", {
+    const res = await fetch(`${API_BASE}/stream-token`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",

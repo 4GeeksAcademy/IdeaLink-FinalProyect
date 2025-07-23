@@ -4,6 +4,8 @@ import Tarjeta from './Tarjeta_feed';
 import useGlobalReducer from '../../hooks/useGlobalReducer';
 import { useState, useEffect } from 'react';
 
+const API_BASE = import.meta.env.VITE_API_URL;
+
 const Feed_central = () => {
     const { store, dispatch } = useGlobalReducer();
     const [userFavorites, setUserFavorites] = useState([]);
@@ -13,7 +15,7 @@ const Feed_central = () => {
     const fetchProjects = async () => {
         const token = localStorage.getItem("jwt-token");
         try {
-            const res = await fetch("http://127.0.0.1:5000/api/projects", {
+            const res = await fetch(`${API_BASE}/projects`, {
                 headers: {
                     "Content-Type": "application/json",
                     "Authorization": `Bearer ${token}`
@@ -33,7 +35,7 @@ const Feed_central = () => {
 
     const fetchTrendingHashtags = async () => {
         try {
-            const res = await fetch("http://127.0.0.1:5000/api/trending-hashtags");
+            const res = await fetch(`${API_BASE}/trending-hashtags`);
             if (!res.ok) {
                 console.error("Error al obtener hashtags trending");
                 return;
@@ -48,7 +50,7 @@ const Feed_central = () => {
     const fetchFavorites = async () => {
         const token = localStorage.getItem("jwt-token");
         try {
-            const res = await fetch("http://127.0.0.1:5000/api/my-favorites", {
+            const res = await fetch(`${API_BASE}/my-favorites`, {
                 headers: {
                     "Authorization": `Bearer ${token}`
                 }

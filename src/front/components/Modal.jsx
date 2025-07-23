@@ -6,6 +6,8 @@ import { useState } from "react";
 import useGlobalReducer from "../hooks/useGlobalReducer";
 import sdk from "@stackblitz/sdk";
 
+const API_BASE = import.meta.env.VITE_API_URL;
+
 export default function Modal1() {
     const [open, setOpen] = useState(false);
     const { store, dispatch } = useGlobalReducer();
@@ -76,7 +78,7 @@ export default function Modal1() {
 
             const token = localStorage.getItem("jwt-token");
 
-            const response = await fetch("http://127.0.0.1:5000/api/projects", {
+            const response = await fetch(`${API_BASE}/projects`, {
                 method: "POST",
                 headers: {
                     Authorization: `Bearer ${token}`
